@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomePageController!{% endblock %}
+
+{% block body %}
+
+    <div class="jumbotron homepageHeader">
+        <h1 class="display-4 text-white bg-dark font-weight-bold text-right">Hello, world!</h1>
+{#        <img src="{{ asset('build/images/header.jpg') }}" class="img-fluid" alt="Responsive image">#}
+    </div>
+
+    <div class="card-deck">
+        {% for project in projects %}
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+
+                    <p class="card-text">{{ project.getOwner }} | {{ project.getFirstCreated | date('Y:m:d') }}</p>
+                    <a class="btn btn-light" href="{{ path('project_show_by_id', {'id': project.getId }) }}"
+                       role="button">Go to project</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}
