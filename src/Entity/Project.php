@@ -92,7 +92,7 @@ class Project
     }
 
     /**
-     * @param $description
+     * @param string $description
      * @return \App\Entity\Project
      */
     public function setDescription($description)
@@ -130,7 +130,7 @@ class Project
     }
 
     /**
-     * @param \App\Entity\string $title
+     * @param string $title
      * @return \App\Entity\Project
      */
     public function setTitle($title)
