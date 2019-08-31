@@ -14,6 +14,9 @@ class AppFixtures extends Fixture
             $project = new Project();
             $project->setOwner('owner_' . $i);
             $project->setFirstCreated(date_create($this->getRandomDate($i)));
+            $project->setDescription('SomeLorem ipsum text goes here');
+            $project->setValue($i . '00');
+            $project->setTitle('The Title');
             $manager->persist($project);
         }
 

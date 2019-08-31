@@ -5,15 +5,9 @@
 {% block body %}
 
     <div class="jumbotron homepageHeader">
-        <h1 class="display-4 text-white bg-dark font-weight-bold text-right">Hello, world!</h1>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container">
-                <a class="navbar-brand" href="#">Navbar</a>
-            </div>
-        </nav>
+        {% include 'partials/navbar.html.twig' %}
     </div>
-
-
+    
     <div class="container">
         <div class="row">
             <div class="col-lg-6 col-sm-12">
@@ -27,21 +21,6 @@
                 </p>
             </div>
         </div>
-    </div>
-    <div class="card-deck">
-        {% for project in projects %}
-            <div class="card">
-                <div class="card-header">
-                    Header
-                </div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">{{ project.getOwner }}</li>
-                    <li class="list-group-item">{{ project.getFirstCreated | date('Y:m:d') }}</li>
-                </ul>
-                <a class="btn btn-light" href="{{ path('project_show_by_id', {'id': project.getId }) }}"
-                   role="button">Go to project</a>
-            </div>
-        {% endfor %}
     </div>
 
 {% endblock %}

@@ -26,31 +26,116 @@ class Project
      */
     private $firstCreated;
 
-    public function getId(): ?int
+    /**
+     * @ORM\Column(type="string", length=500)
+     */
+    private $description;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $value;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $title;
+
+    /** @return int|null */
+    public function getId()
     {
         return $this->id;
     }
 
-    public function getOwner(): ?string
+    /** @return string|null */
+    public function getOwner()
     {
         return $this->owner;
     }
 
-    public function setOwner(string $owner): self
+    /**
+     * @var string $owner
+     * @return \App\Entity\Project
+     */
+    public function setOwner($owner)
     {
         $this->owner = $owner;
 
         return $this;
     }
 
-    public function getFirstCreated(): ?\DateTimeInterface
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getFirstCreated()
     {
         return $this->firstCreated;
     }
 
-    public function setFirstCreated(\DateTimeInterface $firstCreated): self
+    /**
+     * @param \DateTimeInterface $firstCreated
+     * @return \App\Entity\Project
+     */
+    public function setFirstCreated(\DateTimeInterface $firstCreated)
     {
         $this->firstCreated = $firstCreated;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param $description
+     * @return \App\Entity\Project
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * @param int $value
+     * @return \App\Entity\Project
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param \App\Entity\string $title
+     * @return \App\Entity\Project
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
 
         return $this;
     }
