@@ -2,38 +2,49 @@
 
 namespace App\Entity;
 
+use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\Table(name="fos_user")
  */
-class User implements UserInterface
+class User extends BaseUser implements UserInterface
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    protected $id;
+
+//    /**
+//     * @ORM\Column(type="string", length=180, unique=true)
+//     */
+//    pro $username;
+
+//    /**
+//     * @ORM\Column(type="json")
+//     */
+//    protected $roles = [];
+
+//    /**
+//     * @var string The hashed password
+//     * @ORM\Column(type="string")
+//     */
+//    protected $password;
+
+    public function __construct()
+    {
+        parent::__construct();
+        // your own logic
+    }
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @return int
      */
-    private $username;
-
-    /**
-     * @ORM\Column(type="json")
-     */
-    private $roles = [];
-
-    /**
-     * @var string The hashed password
-     * @ORM\Column(type="string")
-     */
-    private $password;
-
-    public function getId(): ?int
+    public function getId()
     {
         return $this->id;
     }
@@ -42,13 +53,18 @@ class User implements UserInterface
      * A visual identifier that represents this user.
      *
      * @see UserInterface
+     * @return string
      */
-    public function getUsername(): string
+    public function getUsername()
     {
         return (string) $this->username;
     }
 
-    public function setUsername(string $username): self
+    /**
+     * @param  string $username
+     * @return \App\Entity\User
+     */
+    public function setUsername($username)
     {
         $this->username = $username;
 
@@ -57,8 +73,9 @@ class User implements UserInterface
 
     /**
      * @see UserInterface
+     * @return array
      */
-    public function getRoles(): array
+    public function getRoles()
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
@@ -67,7 +84,11 @@ class User implements UserInterface
         return array_unique($roles);
     }
 
-    public function setRoles(array $roles): self
+    /**
+     * @param array $roles
+     * @return \App\Entity\User
+     */
+    public function setRoles(array $roles)
     {
         $this->roles = $roles;
 
@@ -76,13 +97,18 @@ class User implements UserInterface
 
     /**
      * @see UserInterface
+     * @return string
      */
-    public function getPassword(): string
+    public function getPassword()
     {
         return (string) $this->password;
     }
 
-    public function setPassword(string $password): self
+    /**
+     * @param \App\Entity\string $password
+     * @return $this
+     */
+    public function setPassword($password)
     {
         $this->password = $password;
 
