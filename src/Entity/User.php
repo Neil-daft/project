@@ -40,95 +40,95 @@ class User extends BaseUser implements UserInterface
         parent::__construct();
         // your own logic
     }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     * @return string
-     */
-    public function getUsername()
-    {
-        return (string) $this->username;
-    }
-
-    /**
-     * @param  string $username
-     * @return \App\Entity\User
-     */
-    public function setUsername($username)
-    {
-        $this->username = $username;
-
-        return $this;
-    }
-
-    /**
-     * @see UserInterface
-     * @return array
-     */
-    public function getRoles()
-    {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
-    }
-
-    /**
-     * @param array $roles
-     * @return \App\Entity\User
-     */
-    public function setRoles(array $roles)
-    {
-        $this->roles = $roles;
-
-        return $this;
-    }
-
-    /**
-     * @see UserInterface
-     * @return string
-     */
-    public function getPassword()
-    {
-        return (string) $this->password;
-    }
-
-    /**
-     * @param \App\Entity\string $password
-     * @return $this
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function getSalt()
-    {
-        // not needed when using the "bcrypt" algorithm in security.yaml
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function eraseCredentials()
-    {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
-    }
+//
+//    /**
+//     * @return int
+//     */
+//    public function getId()
+//    {
+//        return $this->id;
+//    }
+//
+//    /**
+//     * A visual identifier that represents this user.
+//     *
+//     * @see UserInterface
+//     * @return string
+//     */
+//    public function getUsername()
+//    {
+//        return (string) $this->username;
+//    }
+//
+//    /**
+//     * @param  string $username
+//     * @return \App\Entity\User
+//     */
+//    public function setUsername($username)
+//    {
+//        $this->username = $username;
+//
+//        return $this;
+//    }
+//
+//    /**
+//     * @see UserInterface
+//     * @return array
+//     */
+//    public function getRoles()
+//    {
+//        $roles = $this->roles;
+//        // guarantee every user at least has ROLE_USER
+//        $roles[] = 'ROLE_USER';
+//
+//        return array_unique($roles);
+//    }
+//
+//    /**
+//     * @param array $roles
+//     * @return \App\Entity\User
+//     */
+//    public function setRoles(array $roles)
+//    {
+//        $this->roles = $roles;
+//
+//        return $this;
+//    }
+//
+//    /**
+//     * @see UserInterface
+//     * @return string
+//     */
+//    public function getPassword()
+//    {
+//        return (string) $this->password;
+//    }
+//
+//    /**
+//     * @param \App\Entity\string $password
+//     * @return $this
+//     */
+//    public function setPassword($password)
+//    {
+//        $this->password = $password;
+//
+//        return $this;
+//    }
+//
+//    /**
+//     * @see UserInterface
+//     */
+//    public function getSalt()
+//    {
+//        // not needed when using the "bcrypt" algorithm in security.yaml
+//    }
+//
+//    /**
+//     * @see UserInterface
+//     */
+//    public function eraseCredentials()
+//    {
+//        // If you store any temporary, sensitive data on the user, clear it here
+//        // $this->plainPassword = null;
+//    }
 }

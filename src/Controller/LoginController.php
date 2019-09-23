@@ -14,18 +14,30 @@ use Symfony\Component\Security\Http\Util\TargetPathTrait;
 class LoginController extends AbstractController
 {
     use TargetPathTrait;
+//
+//    /**
+//     * @Route("/login", name="app_login")
+//     * @param \Symfony\Component\Security\Http\Authentication\AuthenticationUtils $authenticationUtils
+//     * @return \Symfony\Component\HttpFoundation\Response
+//     *
+//     */
+//    public function login(AuthenticationUtils $authenticationUtils): Response
+//    {
+//        // get the login error if there is one
+//        $error = $authenticationUtils->getLastAuthenticationError();
+//        // last username entered by the user
+//        $lastUsername = $authenticationUtils->getLastUsername();
+//
+//        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+//    }
 
-    public function login(AuthenticationUtils $authenticationUtils): Response
-    {
-        // get the login error if there is one
-        $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
-        $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
-    }
-
-   
+    /**
+     * @Route("/", name="app_cancel_login")
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\Routing\Generator\UrlGeneratorInterface $urlGenerator
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function cancelLogin(Request $request, UrlGeneratorInterface $urlGenerator): Response
     {
         return new RedirectResponse($this->generateUrl('home_page'));
