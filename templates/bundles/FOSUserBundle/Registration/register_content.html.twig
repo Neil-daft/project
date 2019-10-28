@@ -1,0 +1,37 @@
+{% trans_default_domain 'FOSUserBundle' %}
+<div class="jumbotron">
+{{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
+<div class="form-group">
+    {{ form_errors(form) }}
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="form-group">
+            {{ form_row(form.email, {'attr': {'class': 'form-control'}}) }}
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            {{ form_row(form.username, {'attr': {'class': 'form-control'}}) }}
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div class="form-group">
+            {{ form_row(form.plainPassword.first, {'attr': {'class': 'form-control'}}) }}
+        </div>
+    </div>
+    <div class="col">
+        <div class="form-group">
+            {{ form_row(form.plainPassword.second, {'attr': {'class': 'form-control'}}) }}
+        </div>
+    </div>
+</div>
+
+    <div>
+        <input type="submit" value="{{ 'registration.submit'|trans }}" class="btn btn-outline-info"/>
+    </div>
+{{ form_end(form) }}
+</div>

@@ -18,9 +18,25 @@
                 </li>
             </ul>
 
+{#                <a href="{{ path('fos_user_security_login') }}">#}
+{#                    <button class="btn btn-outline-success my-2 my-sm-0">Login</button>#}
+{#                </a>#}
+
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                <p class="text-success">{{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}</p>
+                <a href="{{ path('fos_user_security_logout') }}">
+{#                    {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}#}
+                    <button class="btn btn-outline-success my-2 my-sm-0">Logout</button>
+                </a>
+            {% else %}
                 <a href="{{ path('fos_user_security_login') }}">
                     <button class="btn btn-outline-success my-2 my-sm-0">Login</button>
+{#                    {{ 'layout.login'|trans({}, 'FOSUserBundle') }}#}
                 </a>
+            {% endif %}
+            <a href="{{ path('fos_user_registration_register') }}">
+                <button class="btn btn-outline-info my-2 my-sm-0">Register</button>
+            </a>
 
         </div>
     </div>
