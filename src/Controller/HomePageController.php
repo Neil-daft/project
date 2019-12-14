@@ -2,8 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Project;
-use App\Repository\ProjectRepository as ProjectRepositoryAlias;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 

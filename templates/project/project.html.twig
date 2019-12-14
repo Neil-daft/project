@@ -4,7 +4,10 @@
 
 {% block body %}
     {% include 'partials/navbar.html.twig' %}
+    {% if projects %}
+
     <div class="container-fluid">
+        {% for project in projects %}
         <div class="card">
             <div class="card-header">
                 {{ project.getTitle }}
@@ -18,6 +21,7 @@
             <a class="btn btn-info" href="{{ path('project_show_by_id', {'id': project.getId }) }}"
                role="button">Go to project</a>
         </div>
+        {% endfor %}
     </div>
-
+{% endif %}
 {% endblock %}

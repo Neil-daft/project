@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Project;
+use App\Entity\User;
 use App\Repository\ProjectRepository as ProjectRepositoryAlias;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -38,6 +39,27 @@ class ProjectController extends AbstractController
         return $this->render(
             'project/all_projects.html.twig',
             ['projects' => $projects]
+        );
+    }
+
+    /**
+     * @Route("/admin/projects/{username}", name="user_projects")
+     * @ParamConverter("user", class="App\Entity\User")
+     * @param \App\Entity\User $user
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getUserProjects(User $user)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $repository = $entityManager->getRepository(Project::class);
+
+        $projects = $repository->findBy(['owner' => $user->getUsername()]);
+
+        return $this->render(
+            'project/project.html.twig',
+            [
+                'projects' => $projects
+            ]
         );
     }
 }
