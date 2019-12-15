@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Repository\ProjectRepository as ProjectRepositoryAlias;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ProjectController extends AbstractController
@@ -19,7 +20,7 @@ class ProjectController extends AbstractController
     public function index(Project $project)
     {
         return $this->render(
-            'project/project.html.twig',
+            'project/projects.html.twig',
             ['project' => $project]
         );
     }
@@ -46,9 +47,8 @@ class ProjectController extends AbstractController
      * @Route("/admin/projects/{username}", name="user_projects")
      * @ParamConverter("user", class="App\Entity\User")
      * @param \App\Entity\User $user
-     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function getUserProjects(User $user)
+    public function getUserProjects(User $user): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
         $repository = $entityManager->getRepository(Project::class);
@@ -56,10 +56,29 @@ class ProjectController extends AbstractController
         $projects = $repository->findBy(['owner' => $user->getUsername()]);
 
         return $this->render(
-            'project/project.html.twig',
+            'project/projects.html.twig',
             [
+                'user' => $user,
                 'projects' => $projects
             ]
         );
+    }
+
+    /**
+     * @Route("/admin/project/edit/{id}", name="project_edit")
+     * @ParamConverter("user", class="App\Entity\User")
+     * @param \App\Entity\User $user
+     * @param int $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function editProject(User $user, int $id)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $repository = $entityManager->getRepository(Project::class);
+        $project = $repository->find($id);
+        $project->setTitle('New product name!');
+        $entityManager->flush();
+
+        return $this->redirectToRoute('user_projects', ['username' => $user->getUsername()]);
     }
 }
