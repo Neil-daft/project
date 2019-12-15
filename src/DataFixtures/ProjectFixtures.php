@@ -5,10 +5,11 @@ namespace App\DataFixtures;
 use App\Entity\Project;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class AppFixtures extends Fixture
+class ProjectFixtures extends Fixture implements DependentFixtureInterface
 {
     /** @var \Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface */
     private $encoder;
@@ -30,16 +31,9 @@ class AppFixtures extends Fixture
             $project->setDescription('SomeLorem ipsum text goes here');
             $project->setValue((int)$i . 00);
             $project->setTitle('The Title');
+            $project->setUser($this->getReference(User::class.'_1'));
             $manager->persist($project);
         }
-
-        $user = new User();
-        $user->setUsername('neil');
-        $user->setRoles(['ROLE_ADMIN', 'ROLE_USER']);
-        $user->setPassword($this->encoder->encodePassword($user, 'password'));
-        $user->setEmail('neil@gmail');
-        $user->setEmailCanonical('neil@gmails');
-        $manager->persist($user);
 
         $manager->flush();
     }
@@ -53,5 +47,13 @@ class AppFixtures extends Fixture
         $string = '2019-01-'.$i;
 
         return $string;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getDependencies()
+    {
+        return [UserFixtures::class];
     }
 }

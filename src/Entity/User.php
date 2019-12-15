@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -18,6 +20,11 @@ class User extends BaseUser implements UserInterface
      * @ORM\Column(type="integer")
      */
     protected $id;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Project", mappedBy="user")
+     */
+    private $project;
 
 //    /**
 //     * @ORM\Column(type="string", length=180, unique=true)
@@ -38,7 +45,39 @@ class User extends BaseUser implements UserInterface
     public function __construct()
     {
         parent::__construct();
+        $this->project = new ArrayCollection();
         // your own logic
+    }
+
+    /**
+     * @return Collection|project[]
+     */
+    public function getProject(): Collection
+    {
+        return $this->project;
+    }
+
+    public function addProject(project $project): self
+    {
+        if (!$this->project->contains($project)) {
+            $this->project[] = $project;
+            $project->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProject(project $project): self
+    {
+        if ($this->project->contains($project)) {
+            $this->project->removeElement($project);
+            // set the owning side to null (unless already changed)
+            if ($project->getUser() === $this) {
+                $project->setUser(null);
+            }
+        }
+
+        return $this;
     }
 //
 //    /**
