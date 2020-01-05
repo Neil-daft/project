@@ -32,6 +32,8 @@ class ProjectController extends AbstractController
     {
         $project = new Project();
         $project->setUser($this->getUser());
+        $project->setStatus('pending');
+        $project->setCreatedAt(new \DateTime('now'));
         $form = $this->createForm(Project1Type::class, $project);
         $form->handleRequest($request);
 
