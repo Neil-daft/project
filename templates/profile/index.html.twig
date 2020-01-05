@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block body %}
+    {% include 'partials/navbar.html.twig' %}
+    {% if is_granted('ROLE_TRADE') %}
+        {% include 'profile/trade.html.twig' %}
+    {% else %}
+        {% include 'profile/user.html.twig' %}
+    {% endif %}
+{% endblock %}

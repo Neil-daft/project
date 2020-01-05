@@ -4,40 +4,30 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <li class="nav-item active">
-                    <a class="nav-link" href="{{ path('home_page') }}">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="{{ path('home_page') }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('get_all_projects') }}">Projects </a>
+                    <a class="nav-link" href="{{ path('project_index') }}">Projects</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li>
+                {% if is_granted("IS_AUTHENTICATED_FULLY") %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('profile') }}" tabindex="-1" aria-disabled="true">Profile</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_login') }}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_register') }}">Register</a>
+                    </li>
+                {% endif %}
             </ul>
-
-{#                <a href="{{ path('fos_user_security_login') }}">#}
-{#                    <button class="btn btn-outline-success my-2 my-sm-0">Login</button>#}
-{#                </a>#}
-
-            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-                <p class="text-success">{{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }}</p>
-                <a href="{{ path('fos_user_security_logout') }}">
-{#                    {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}#}
-                    <button class="btn btn-outline-success my-2 my-sm-0">Logout</button>
-                </a>
-            {% else %}
-                <a href="{{ path('fos_user_security_login') }}">
-                    <button class="btn btn-outline-success my-2 my-sm-0">Login</button>
-{#                    {{ 'layout.login'|trans({}, 'FOSUserBundle') }}#}
-                </a>
-            {% endif %}
-            <a href="{{ path('fos_user_registration_register') }}">
-                <button class="btn btn-outline-info my-2 my-sm-0">Register</button>
-            </a>
-
         </div>
     </div>
 </nav>

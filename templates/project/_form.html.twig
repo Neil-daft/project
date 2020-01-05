@@ -1,0 +1,13 @@
+{{ form_start(form) }}
+    {{ form_errors(form) }}
+<div class="form-group">
+    {{ form_row(form.title, {'attr': {'class': 'form-control', 'placeholder': 'Project title'}} ) }}
+</div>
+<div class="form-group">
+    {{ form_row(form.description, {'attr': {'class': 'form-control', 'placeholder': 'A good description will bring more interest to your project'}} ) }}
+</div>
+<div class="form-group">
+    {{ form_row(form.value, {'attr': {'class': 'form-control', 'placeholder': 'A rough estimate on the value of your project'}} ) }}
+</div>
+<button class="btn btn-outline-primary">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * @method Project|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,21 +14,27 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class ProjectRepository extends ServiceEntityRepository
 {
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Project::class);
     }
 
-    public function findLatestThreeProjects()
+    // /**
+    //  * @return Project[] Returns an array of Project objects
+    //  */
+    /*
+    public function findByExampleField($value)
     {
         return $this->createQueryBuilder('p')
-            ->setFirstResult(0)
-            ->setMaxResults(3)
-            ->orderBy('p.firstCreated', 'DESC')
+            ->andWhere('p.exampleField = :val')
+            ->setParameter('val', $value)
+            ->orderBy('p.id', 'ASC')
+            ->setMaxResults(10)
             ->getQuery()
-            ->execute();
+            ->getResult()
+        ;
     }
-
+    */
 
     /*
     public function findOneBySomeField($value): ?Project
