@@ -1,0 +1,46 @@
+<div class="container">
+    <h1>Hi Admin user</h1>
+    <h2 class="h3 text-center">All shortlists</h2>
+    <div>
+        <ul class="list-group">
+            {% for shortlist in shortlists %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div class="d-flex flex-column align-content-center">
+                        <h5 class="mb-1">{{ shortlist.project.title }}</h5>
+                        <p class="mb-1">{{ shortlist.project.description }}</p>
+                        <small class="mt-1">Value : {{ shortlist.project.value }}</small>
+                        <small>Status :
+                            <mark>{{ shortlist.project.status }}</mark>
+                        </small>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <h2 class="h3 text-center">All projects:</h2>
+    <div>
+        <ul class="list-group">
+            {% for project in projects %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div class="d-flex flex-column align-content-center">
+                        <h5 class="mb-1">{{ project.title }}</h5>
+                        <p class="mb-1">{{ project.description }}</p>
+                        <small class="mt-1">Value : {{ project.value }}</small>
+                        <small>Status : <mark>{{ project.status }}</mark></small>
+                    </div>
+                    <div class="d-flex justify-content-end align-items-center">
+                        <a href="{{ path('project_approve', {'id': project.id}) }}" type="button" class="m-3 btn btn-outline-secondary btn-sm">Approve</a>
+                    </div>
+{#                    <div class="d-flex justify-content-end align-items-center">#}
+{#                        <a href="{{ path('project_edit', {'id': project.id}) }}" type="button" class="m-3 btn btn-outline-secondary btn-sm">edit</a>#}
+{#                        {{ include('project/_delete_form.html.twig') }}#}
+{#                    </div>#}
+
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {#    <div class="mt-4">#}
+    {#        <a href="{{ path('project_new') }}" type="button" class="btn btn-outline-primary">Create New Project</a>#}
+    {#    </div>#}
+</div>

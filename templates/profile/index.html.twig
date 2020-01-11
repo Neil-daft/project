@@ -4,9 +4,11 @@
 
 {% block body %}
     {% include 'partials/navbar.html.twig' %}
-    {% if is_granted('ROLE_TRADE') %}
+    {% if is_granted('ROLE_ADMIN') %}
+        {% include 'profile/admin.html.twig' %}
+    {% elseif is_granted('ROLE_TRADE') %}
         {% include 'profile/trade.html.twig' %}
-    {% else %}
+    {% elseif is_granted('ROLE_USER') %}
         {% include 'profile/user.html.twig' %}
     {% endif %}
 {% endblock %}

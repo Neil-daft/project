@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -44,9 +45,15 @@ class User implements UserInterface
      */
     private $projects;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ShortList", mappedBy="user")
+     */
+    private $shortLists;
+
     public function __construct()
     {
         $this->projects = new PersistentCollection();
+        $this->shortLists = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -167,5 +174,36 @@ class User implements UserInterface
     public function __toString(): string
     {
         return $this->getUsername();
+    }
+
+    /**
+     * @return Collection|ShortList[]
+     */
+    public function getShortLists(): Collection
+    {
+        return $this->shortLists;
+    }
+
+    public function addShortList(ShortList $shortList): self
+    {
+        if (!$this->shortLists->contains($shortList)) {
+            $this->shortLists[] = $shortList;
+            $shortList->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeShortList(ShortList $shortList): self
+    {
+        if ($this->shortLists->contains($shortList)) {
+            $this->shortLists->removeElement($shortList);
+            // set the owning side to null (unless already changed)
+            if ($shortList->getUser() === $this) {
+                $shortList->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

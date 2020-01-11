@@ -22,8 +22,9 @@ final class Version20200105221412 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE project ADD description VARCHAR(500) DEFAULT NULL, ADD value INT NOT NULL, ADD created_at DATETIME NOT NULL DEFAULT NOW(), ADD status VARCHAR(255) NOT NULL);
+        $this->addSql('ALTER TABLE project ADD description VARCHAR(500) DEFAULT NULL, ADD value INT NOT NULL, ADD created_at DATETIME NOT NULL DEFAULT NOW(), ADD status VARCHAR(255) NOT NULL');
     }
+    
 
     public function down(Schema $schema) : void
     {

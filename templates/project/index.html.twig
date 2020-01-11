@@ -3,33 +3,35 @@
 {% block title %}Project index{% endblock %}
 
 {% block body %}
-    <h1>Project index</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for project in projects %}
-            <tr>
-                <td>{{ project.id }}</td>
-                <td>{{ project.title }}</td>
-                <td>
-                    <a href="{{ path('project_show', {'id': project.id}) }}">show</a>
-                    <a href="{{ path('project_edit', {'id': project.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="3">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('project_new') }}">Create new</a>
+    {% include 'partials/navbar.html.twig' %}
+    <div class="container">
+        <h1>Current Active Projects</h1>
+        <div>
+            <ul class="list-group">
+                {% for project in projects %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="d-flex flex-column align-content-center">
+                            <h5 class="mb-1">{{ project.title }}</h5>
+                            <p class="mb-1">{{ project.description }}</p>
+                            <small class="mt-1">Value : {{ project.value }}</small>
+                            <small>Status : <mark>{{ project.status }}</mark></small>
+                        </div>
+                        <div class="d-flex justify-content-end align-items-center">
+                            {% if project.shortlists is empty %}
+                             <a href="{{ path('shortlist_create', {'id': project.id}) }}" type="button" class="m-3 btn btn-outline-secondary btn-sm">List</a>
+                            {% elseif project.shortlists %}
+                                {% for shortlist in project.shortlists %}
+                                    {% if shortlist.user != app.user %}
+                                        <a href="{{ path('shortlist_create', {'id': project.id}) }}" type="button" class="m-3 btn btn-outline-secondary btn-sm">List</a>
+                                    {% else %}
+                                     <span class="badge badge-info">Listed</span>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 {% endblock %}

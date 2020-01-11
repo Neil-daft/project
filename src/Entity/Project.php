@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -45,6 +47,16 @@ class Project
      * @ORM\Column(type="string", length=255)
      */
     private $status;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ShortList", mappedBy="project")
+     */
+    private $shortLists;
+
+    public function __construct()
+    {
+        $this->shortLists = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -119,6 +131,37 @@ class Project
     public function setStatus(string $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ShortList[]
+     */
+    public function getShortLists(): Collection
+    {
+        return $this->shortLists;
+    }
+
+    public function addShortList(ShortList $shortList): self
+    {
+        if (!$this->shortLists->contains($shortList)) {
+            $this->shortLists[] = $shortList;
+            $shortList->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeShortList(ShortList $shortList): self
+    {
+        if ($this->shortLists->contains($shortList)) {
+            $this->shortLists->removeElement($shortList);
+            // set the owning side to null (unless already changed)
+            if ($shortList->getProject() === $this) {
+                $shortList->setProject(null);
+            }
+        }
 
         return $this;
     }

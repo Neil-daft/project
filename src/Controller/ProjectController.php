@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * @Route("/project")
@@ -20,8 +21,16 @@ class ProjectController extends AbstractController
      */
     public function index(ProjectRepository $projectRepository): Response
     {
+        try {
+            $this->denyAccessUnlessGranted('ROLE_TRADE');
+        } catch (AccessDeniedException $e) {
+            return $this->render('error/access_denied.html.twig', [
+                'message' => $e->getMessage()
+            ]);
+        }
         return $this->render('project/index.html.twig', [
-            'projects' => $projectRepository->findAll(),
+            'projects' => $projectRepository->findBy([], ['createdAt' => 'desc'])
+//            'projects' => $projectRepository->findBy(['status' => 'live']),
         ]);
     }
 
@@ -30,6 +39,13 @@ class ProjectController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        try {
+            $this->denyAccessUnlessGranted('ROLE_USER');
+        } catch (AccessDeniedException $e) {
+            return $this->render('error/access_denied.html.twig', [
+                'message' => $e->getMessage()
+            ]);
+        }
         $project = new Project();
         $project->setUser($this->getUser());
         $project->setStatus('pending');
@@ -67,6 +83,14 @@ class ProjectController extends AbstractController
      */
     public function edit(Request $request, Project $project): Response
     {
+        try {
+            $this->denyAccessUnlessGranted('ROLE_USER');
+        } catch (AccessDeniedException $e) {
+            return $this->render('error/access_denied.html.twig', [
+                'message' => $e->getMessage()
+            ]);
+        }
+
         $form = $this->createForm(Project1Type::class, $project);
         $form->handleRequest($request);
 
@@ -87,11 +111,33 @@ class ProjectController extends AbstractController
      */
     public function delete(Request $request, Project $project): Response
     {
+        try {
+            $this->denyAccessUnlessGranted('ROLE_USER');
+        } catch (AccessDeniedException $e) {
+            return $this->render('error/access_denied.html.twig', [
+                'message' => $e->getMessage()
+            ]);
+        }
+
         if ($this->isCsrfTokenValid('delete'.$project->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($project);
             $entityManager->flush();
         }
+
+        return $this->redirectToRoute('profile');
+    }
+
+    /**
+     * @Route("/approve/{id}", name="project_approve")
+     */
+    public function approveProject(Project $project)
+    {
+        $project->setStatus('active');
+        $this
+            ->getDoctrine()
+            ->getManager()
+            ->flush();
 
         return $this->redirectToRoute('profile');
     }
