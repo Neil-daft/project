@@ -52,7 +52,7 @@ class User implements UserInterface
 
     public function __construct()
     {
-        $this->projects = new PersistentCollection();
+        $this->projects = new ArrayCollection();
         $this->shortLists = new ArrayCollection();
     }
 

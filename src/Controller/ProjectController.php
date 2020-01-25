@@ -37,9 +37,22 @@ class ProjectController extends AbstractController
                 'message' => $e->getMessage()
             ]);
         }
+        $projects = $this->projectService->getProjectsOrderedByDate();
+        $listed = [];
+        foreach ($projects as $project) {
+            /** @var Project $project */
+            if (!empty($project->getShortLists())) {
+                foreach ($project->getShortLists() as $shortList) {
+                    if ($this->getUser() == $shortList->getUser()) {
+                        $listed[$project->getId()] = true;
+                    }
+                }
+            }
+        }
+
         return $this->render('project/index.html.twig', [
-            'projects' => $this->projectService->getProjectsOrderedByDate()
-//            'projects' => $projectRepository->findBy(['status' => 'live']),
+            'projects' => $this->projectService->getProjectsOrderedByDate(),
+            'listed' => $listed
         ]);
     }
 

@@ -11,14 +11,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProfileController extends AbstractController
 {
     /**
-     * @var \App\Repository\ProjectRepository
-     */
-    private $projectRepository;
-
-    /**
      * @var \App\Repository\ShortListRepository
      */
     private $shortListRepository;
+
     /**
      * @var \App\Service\ProjectService
      */

@@ -17,16 +17,10 @@
                             <small>Status : <mark>{{ project.status }}</mark></small>
                         </div>
                         <div class="d-flex justify-content-end align-items-center">
-                            {% if project.shortlists is empty %}
-                             <a href="{{ path('shortlist_create', {'id': project.id}) }}" type="button" class="m-3 btn btn-outline-secondary btn-sm">List</a>
-                            {% elseif project.shortlists %}
-                                {% for shortlist in project.shortlists %}
-                                    {% if shortlist.user != app.user %}
-                                        <a href="{{ path('shortlist_create', {'id': project.id}) }}" type="button" class="m-3 btn btn-outline-secondary btn-sm">List</a>
-                                    {% else %}
-                                     <span class="badge badge-info">Listed</span>
-                                    {% endif %}
-                                {% endfor %}
+                            {% if listed[project.id] is defined %}
+                                <span class="badge badge-info">Listed</span>
+                            {% else %}
+                                <a href="{{ path('shortlist_create', {'id': project.id}) }}" type="button" class="m-3 btn btn-outline-secondary btn-sm">List</a>
                             {% endif %}
                         </div>
                     </li>
