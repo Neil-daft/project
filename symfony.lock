@@ -159,6 +159,9 @@
     "ocramius/proxy-manager": {
         "version": "2.1.1"
     },
+    "php": {
+        "version": "7.3"
+    },
     "phpdocumentor/reflection-common": {
         "version": "1.0.1"
     },
@@ -223,12 +226,12 @@
         "version": "v4.2.11"
     },
     "symfony/console": {
-        "version": "3.3",
+        "version": "4.4",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "master",
-            "version": "3.3",
-            "ref": "482d233eb8de91ebd042992077bbd5838858890c"
+            "version": "4.4",
+            "ref": "ea8c0eda34fda57e7d5cd8cbd889e2a387e3472c"
         },
         "files": [
             "bin/console",
@@ -270,6 +273,9 @@
     },
     "symfony/dotenv": {
         "version": "v4.2.11"
+    },
+    "symfony/error-handler": {
+        "version": "v4.4.3"
     },
     "symfony/event-dispatcher": {
         "version": "v4.2.11"
@@ -338,6 +344,9 @@
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
     },
+    "symfony/mime": {
+        "version": "v4.4.3"
+    },
     "symfony/monolog-bridge": {
         "version": "v4.2.11"
     },
@@ -388,6 +397,9 @@
     },
     "symfony/polyfill-php72": {
         "version": "v1.12.0"
+    },
+    "symfony/polyfill-php73": {
+        "version": "v1.13.1"
     },
     "symfony/process": {
         "version": "v4.2.11"

@@ -2,9 +2,10 @@
 
 namespace App\Controller;
 
+use App\Domain\Status;
 use App\Entity\Project;
 use App\Form\Project1Type;
-use App\Repository\ProjectRepository;
+use App\Service\ProjectService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,10 +17,18 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class ProjectController extends AbstractController
 {
+    /** @var \App\Service\ProjectService */
+    private $projectService;
+
+    public function __construct(ProjectService $projectService)
+    {
+        $this->projectService = $projectService;
+    }
+
     /**
      * @Route("/", name="project_index", methods={"GET"})
      */
-    public function index(ProjectRepository $projectRepository): Response
+    public function index(ProjectService $projectService): Response
     {
         try {
             $this->denyAccessUnlessGranted('ROLE_TRADE');
@@ -29,7 +38,7 @@ class ProjectController extends AbstractController
             ]);
         }
         return $this->render('project/index.html.twig', [
-            'projects' => $projectRepository->findBy([], ['createdAt' => 'desc'])
+            'projects' => $this->projectService->getProjectsOrderedByDate()
 //            'projects' => $projectRepository->findBy(['status' => 'live']),
         ]);
     }
@@ -48,16 +57,13 @@ class ProjectController extends AbstractController
         }
         $project = new Project();
         $project->setUser($this->getUser());
-        $project->setStatus('pending');
+        $project->setStatus(Status::STATUS_PENDING);
         $project->setCreatedAt(new \DateTime('now'));
         $form = $this->createForm(Project1Type::class, $project);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-
-            $entityManager->persist($project);
-            $entityManager->flush();
+            $this->projectService->save($project);
 
             return $this->redirectToRoute('profile');
         }
@@ -95,7 +101,7 @@ class ProjectController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->projectService->update();
 
             return $this->redirectToRoute('profile');
         }
@@ -120,9 +126,7 @@ class ProjectController extends AbstractController
         }
 
         if ($this->isCsrfTokenValid('delete'.$project->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($project);
-            $entityManager->flush();
+            $this->projectService->delete($project);
         }
 
         return $this->redirectToRoute('profile');
@@ -133,11 +137,7 @@ class ProjectController extends AbstractController
      */
     public function approveProject(Project $project)
     {
-        $project->setStatus('active');
-        $this
-            ->getDoctrine()
-            ->getManager()
-            ->flush();
+        $this->projectService->approve($project);
 
         return $this->redirectToRoute('profile');
     }

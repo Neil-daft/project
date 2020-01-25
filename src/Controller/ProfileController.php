@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\ProjectRepository;
 use App\Repository\ShortListRepository;
+use App\Service\ProjectService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -18,11 +19,15 @@ class ProfileController extends AbstractController
      * @var \App\Repository\ShortListRepository
      */
     private $shortListRepository;
+    /**
+     * @var \App\Service\ProjectService
+     */
+    private $projectService;
 
-    public function __construct(ProjectRepository $projectRepository, ShortListRepository $shortListRepository)
+    public function __construct(ProjectService $projectService, ShortListRepository $shortListRepository)
     {
-        $this->projectRepository = $projectRepository;
         $this->shortListRepository = $shortListRepository;
+        $this->projectService = $projectService;
     }
     /**
      * @Route("/profile", name="profile")
@@ -33,7 +38,7 @@ class ProfileController extends AbstractController
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
         if ($this->isGranted('ROLE_ADMIN')) {
-            $projects = $this->projectRepository->findAll();
+            $projects = $this->projectService->getProjectsOrderedByDate();
             $shortlists = $this->shortListRepository->findAll();
 
             return $this->render('profile/index.html.twig', [

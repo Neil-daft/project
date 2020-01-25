@@ -1,46 +1,62 @@
 <div class="container">
     <h1>Hi Admin user</h1>
-    <h2 class="h3 text-center">All shortlists</h2>
     <div>
-        <ul class="list-group">
-            {% for shortlist in shortlists %}
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <div class="d-flex flex-column align-content-center">
-                        <h5 class="mb-1">{{ shortlist.project.title }}</h5>
-                        <p class="mb-1">{{ shortlist.project.description }}</p>
-                        <small class="mt-1">Value : {{ shortlist.project.value }}</small>
-                        <small>Status :
-                            <mark>{{ shortlist.project.status }}</mark>
-                        </small>
-                    </div>
-                </li>
-            {% endfor %}
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Shortlists</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Projects</a>
+            </li>
+{#            <li class="nav-item">#}
+{#                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</a>#}
+{#            </li>#}
         </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="mt-5">
+                    <ul class="list-group">
+                        {% for shortlist in shortlists %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div class="d-flex flex-column align-content-center">
+                                    <h5 class="mb-1">{{ shortlist.project.title }}</h5>
+                                    <p class="mb-1">{{ shortlist.project.description }}</p>
+                                    <small class="mt-1">Value : {{ shortlist.project.value }}</small>
+                                    <small>Status :
+                                        <mark>{{ shortlist.project.status }}</mark>
+                                    </small>
+                                    <small class="mt-1">User : <mark class="bg-info">{{ shortlist.project.user }}</mark></small>
+                                    <small class="mt-1">Trade User : <mark class="bg-success">{{ shortlist.user }}</mark></small>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <div class="mt-5">
+                    <ul class="list-group">
+                        {% for project in projects %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div class="d-flex flex-column align-content-center">
+                                    <h5 class="mb-1">{{ project.title }}</h5>
+                                    <p class="mb-1">{{ project.description }}</p>
+                                    <small class="mt-1">Value : {{ project.value }}</small>
+                                    <small>Status : <mark>{{ project.status }}</mark></small>
+                                </div>
+                                <div class="d-flex justify-content-end align-items-center">
+                                    {% if project.status == constant('App\\Domain\\Status::STATUS_ACTIVE') %}
+                                        <a href="{{ path('project_approve', {'id': project.id}) }}" type="button" class="m-3 btn btn-success btn-sm">Approved</a>
+                                    {% else %}
+                                        <a href="{{ path('project_approve', {'id': project.id}) }}" type="button" class="m-3 btn btn-outline-secondary btn-sm">Approve</a>
+                                    {% endif %}
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+        </div>
     </div>
-    <h2 class="h3 text-center">All projects:</h2>
-    <div>
-        <ul class="list-group">
-            {% for project in projects %}
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <div class="d-flex flex-column align-content-center">
-                        <h5 class="mb-1">{{ project.title }}</h5>
-                        <p class="mb-1">{{ project.description }}</p>
-                        <small class="mt-1">Value : {{ project.value }}</small>
-                        <small>Status : <mark>{{ project.status }}</mark></small>
-                    </div>
-                    <div class="d-flex justify-content-end align-items-center">
-                        <a href="{{ path('project_approve', {'id': project.id}) }}" type="button" class="m-3 btn btn-outline-secondary btn-sm">Approve</a>
-                    </div>
-{#                    <div class="d-flex justify-content-end align-items-center">#}
-{#                        <a href="{{ path('project_edit', {'id': project.id}) }}" type="button" class="m-3 btn btn-outline-secondary btn-sm">edit</a>#}
-{#                        {{ include('project/_delete_form.html.twig') }}#}
-{#                    </div>#}
-
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-    {#    <div class="mt-4">#}
-    {#        <a href="{{ path('project_new') }}" type="button" class="btn btn-outline-primary">Create New Project</a>#}
-    {#    </div>#}
 </div>
