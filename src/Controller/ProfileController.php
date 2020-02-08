@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Repository\ProjectRepository;
 use App\Repository\ShortListRepository;
 use App\Service\ProjectService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

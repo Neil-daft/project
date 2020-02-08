@@ -1,3 +1,8 @@
 App\Entity\Project:
     project_{1..10}:
       title: <title()>
+      value: <numberBetween(200, 1000)>
+      created_at: <date_create()>
+      status: 'pending'
+      user: '@user*'
+
