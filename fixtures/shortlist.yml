@@ -1,0 +1,5 @@
+App\Entity\ShortList:
+  shortlist_{1..10}:
+    created_at: <date_create()>
+    project: '@project*'
+    user: '@user*'

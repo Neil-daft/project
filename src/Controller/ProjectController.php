@@ -28,7 +28,7 @@ class ProjectController extends AbstractController
     /**
      * @Route("/", name="project_index", methods={"GET"})
      */
-    public function index(ProjectService $projectService): Response
+    public function index(): Response
     {
         try {
             $this->denyAccessUnlessGranted('ROLE_TRADE');
@@ -37,7 +37,8 @@ class ProjectController extends AbstractController
                 'message' => $e->getMessage()
             ]);
         }
-        $projects = $this->projectService->getProjectsOrderedByDate();
+        $projects = $this->projectService->getActiveProjectsOrderedByDate();
+
         $listed = [];
         foreach ($projects as $project) {
             /** @var Project $project */
@@ -51,7 +52,7 @@ class ProjectController extends AbstractController
         }
 
         return $this->render('project/index.html.twig', [
-            'projects' => $this->projectService->getProjectsOrderedByDate(),
+            'projects' => $projects,
             'listed' => $listed
         ]);
     }

@@ -60,9 +60,9 @@ class RegistrationFormType extends AbstractType
                 'expanded' => true,
                 'multiple' => false,
                 'choices' => [
-                    new Role(Role::ROLE_USER),
-                    new Role(Role::ROLE_TRADE)
-                ]
+                    'User' => new Role(Role::ROLE_USER),
+                    'Gardener' => new Role(Role::ROLE_TRADE)
+                ],
             ])
         ;
     }

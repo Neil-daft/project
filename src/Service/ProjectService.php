@@ -52,4 +52,13 @@ class ProjectService
         $this->update();
     }
 
+    /**
+     * @return Project[]
+     */
+    public function getActiveProjectsOrderedByDate()
+    {
+        return $this->projectRepository->findBy(
+            ['status' => 'active'], []
+        );
+    }
 }
