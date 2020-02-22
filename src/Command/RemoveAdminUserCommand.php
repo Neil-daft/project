@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Domain\CommandArgument;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
@@ -30,21 +31,20 @@ class RemoveAdminUserCommand extends Command
         $this->setDescription('Deletes an admin user');
         $this->setHelp('This command deletes an admin user with the provided email address');
         $this->addArgument(
-            'email_address',
+            CommandArgument::EMAIL_ADDRESS,
             InputArgument::REQUIRED,
             'The admin email address');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $email = $input->getArgument('email_address');
         $formatter = $this->getHelper('formatter');
         $io = new SymfonyStyle($input, $output);
-        $io->title(sprintf('Deleting Admin user now with email %s', $input->getArgument('email_address')));
+        $io->title(sprintf('Deleting Admin user now with email %s', $input->getArgument(CommandArgument::EMAIL_ADDRESS)));
 
         try {
             $repository = $this->em->getRepository(User::class);
-            $user= $repository->findOneBy(['email' => $input->getArgument('email_address')]);
+            $user= $repository->findOneBy(['email' => $input->getArgument(CommandArgument::EMAIL_ADDRESS)]);
             $this->em->remove($user);
             $this->em->flush();
             $io->success('Success! The admin user has been deleted');

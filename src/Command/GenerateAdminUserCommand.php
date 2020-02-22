@@ -1,7 +1,9 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Domain\CommandArgument;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
@@ -30,7 +32,7 @@ class GenerateAdminUserCommand extends Command
         $this->setDescription('Creates a new admin user');
         $this->setHelp('This command creates a new admin user with the provided credentials');
         $this->addArgument(
-            'email_address',
+            CommandArgument::EMAIL_ADDRESS,
             InputArgument::REQUIRED,
             'The admin email address');
         $this->addArgument(
@@ -41,11 +43,11 @@ class GenerateAdminUserCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $email = $input->getArgument('email_address');
+        $email = $input->getArgument(CommandArgument::EMAIL_ADDRESS);
         $password = $input->getArgument('password');
         $formatter = $this->getHelper('formatter');
         $io = new SymfonyStyle($input, $output);
-        $io->title(sprintf('Creating Admin user now with username %s', $input->getArgument('email_address')));
+        $io->title(sprintf('Creating Admin user now with username %s', $input->getArgument(CommandArgument::EMAIL_ADDRESS)));
 
         try {
             $user = new User();

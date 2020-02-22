@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Controller;
 
@@ -39,7 +40,7 @@ class ShortListController extends AbstractController
     /**
      * @Route("/new/{id}", name="shortlist_create")
      */
-    public function create($id)
+    public function create(int $id)
     {
         $project = $this->projectRepository->find($id);
         $shortList = new ShortList();

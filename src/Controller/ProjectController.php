@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Controller;
 
@@ -149,7 +150,7 @@ class ProjectController extends AbstractController
     /**
      * @Route("/approve/{id}", name="project_approve")
      */
-    public function approveProject(Project $project)
+    public function approveProject(Project $project): Response
     {
         $this->projectService->approve($project);
 

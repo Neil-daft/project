@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Service;
 
@@ -29,6 +30,20 @@ class ProjectService
         return $this->projectRepository->findBy([], ['createdAt' => 'desc']);
     }
 
+    /**
+     * @return Project[]
+     */
+    public function getActiveProjectsOrderedByDate()
+    {
+        return $this->projectRepository->findBy(['status' => 'active'], []);
+    }
+
+    public function approve(Project $project): void
+    {
+        $project->setStatus(Status::STATUS_ACTIVE);
+        $this->update();
+    }
+
     public function save(Project $project): void
     {
         $this->entityManager->persist($project);
@@ -44,21 +59,5 @@ class ProjectService
     public function update(): void
     {
         $this->entityManager->flush();
-    }
-
-    public function approve(Project $project)
-    {
-        $project->setStatus(Status::STATUS_ACTIVE);
-        $this->update();
-    }
-
-    /**
-     * @return Project[]
-     */
-    public function getActiveProjectsOrderedByDate()
-    {
-        return $this->projectRepository->findBy(
-            ['status' => 'active'], []
-        );
     }
 }
