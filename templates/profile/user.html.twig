@@ -10,6 +10,13 @@
                         <p class="mb-1">{{ project.description }}</p>
                         <small class="mt-1">Value : {{ project.value }}</small>
                         <small>Status : <mark>{{ project.status }}</mark></small>
+                        {% if project.shortLists is defined %}
+                            <small>Interested gardeners:
+                            {% for shortList in project.shortLists %}
+                                <p><mark>{{ shortList.user }}</mark></p>
+                            {% endfor %}
+                            </small>
+                        {% endif %}
                     </div>
                     <div class="d-flex justify-content-end align-items-center">
                         <a href="{{ path('project_edit', {'id': project.id}) }}" type="button" class="m-3 btn btn-outline-secondary btn-sm">edit</a>
