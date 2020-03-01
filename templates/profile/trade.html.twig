@@ -1,26 +1,63 @@
 <div class="container">
     <h1>Hi Trade user</h1>
-    <h2 class="h3 text-center">Your Shortlists:</h2>
     <div>
-        <ul class="list-group">
-            {% if shortlists is defined %}
-                {% for shortlist in shortlists %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div class="d-flex flex-column align-content-center">
-                            <h5 class="mb-1">{{ shortlist.project.title }}</h5>
-                            <p class="mb-1">{{ shortlist.project.description }}</p>
-                            <small class="mt-1">Value : {{ shortlist.project.value }}</small>
-                            <small>Status : <mark>{{ shortlist.project.status }}</mark></small>
-                        </div>
-                        <div class="d-flex justify-content-end align-items-center">
-                            <span class="badge badge-success">Added</span>
-                        </div>
-                    </li>
-                {% endfor %}
-            {% endif %}
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Shortlists</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Projects</a>
+            </li>
+            {#            <li class="nav-item">#}
+            {#                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</a>#}
+            {#            </li>#}
         </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="mt-5">
+                    <ul class="list-group">
+                        {% if shortlists is defined %}
+                            {% for shortlist in shortlists %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="d-flex flex-column align-content-center">
+                                        <h5 class="mb-1">{{ shortlist.project.title }}</h5>
+                                        <p class="mb-1">{{ shortlist.project.description }}</p>
+                                        <small class="mt-1">Value : {{ shortlist.project.value }}</small>
+                                        <small>Status : <mark>{{ shortlist.project.status }}</mark></small>
+                                    </div>
+                                    <div class="d-flex justify-content-end align-items-center">
+                                        <span class="badge badge-success">Added</span>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <div class="mt-5">
+                    <ul class="list-group">
+                        {% for project in projects %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div class="d-flex flex-column align-content-center">
+                                    <h5 class="mb-1">{{ project.title }}</h5>
+                                    <p class="mb-1">{{ project.description }}</p>
+                                    <small class="mt-1">Value : {{ project.value }}</small>
+                                    <small>Status : <mark>{{ project.status }}</mark></small>
+                                </div>
+                                <div class="d-flex justify-content-end align-items-center">
+                                    {% if listed[project.id] is defined %}
+                                        <span class="badge badge-info">Listed</span>
+                                    {% else %}
+                                        <a href="{{ path('shortlist_create', {'id': project.id}) }}" type="button" class="m-3 btn btn-outline-secondary btn-sm">List</a>
+                                    {% endif %}
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+        </div>
     </div>
-{#    <div class="mt-4">#}
-{#        <a href="{{ path('project_new') }}" type="button" class="btn btn-outline-primary">Create New Project</a>#}
-{#    </div>#}
 </div>

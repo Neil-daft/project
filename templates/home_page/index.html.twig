@@ -8,19 +8,65 @@
         {% include 'partials/navbar.html.twig' %}
     </div>
 
-    <div class="container">
+    <div class="container mt-5">
+        <h1 class="text-uppercase">Latest Projects</h1>
         <div class="row">
-            <div class="col-lg-6 col-sm-12">
+
+
+            {% for project in activeProjects %}
+                <div class="col-sm">
+                    <div class="card" style="width: 18rem;">
+                        <img src="{{ asset('build/images/card-header.jpg') }}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ project.title }}</h5>
+                            <p class="card-text">{{ project.description }}</p>
+                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+
+        </div>
+
+    </div>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-sm">
+                <button type="button" class="btn btn-outline-dark">See all projects</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <h1 class="text-uppercase">How it works</h1>
+        <div class="row">
+            <div class="col-sm">
                 <p class="text-justify">
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                    industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type
-                    and scrambled it to make a type specimen book. It has survived not only five centuries, but also the
-                    leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s
-                    with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
-                    publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                    Post a job to get noticed by gardeners near you
+                </p>
+            </div>
+
+
+            <div class="col-sm">
+                <p class="text-justify">
+                    Post a job to get noticed by gardeners near you
+                </p>
+            </div>
+
+
+            <div class="col-sm">
+                <p class="text-justify">
+                    Post a job to get noticed by gardeners near you
                 </p>
             </div>
         </div>
     </div>
+
+    <footer class="footer">
+        <div class="container">
+            <span class="text-muted">Place sticky footer content here.</span>
+        </div>
+    </footer>
 
 {% endblock %}

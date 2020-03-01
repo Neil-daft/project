@@ -33,9 +33,9 @@ class ProjectService
     /**
      * @return Project[]
      */
-    public function getActiveProjectsOrderedByDate()
+    public function getActiveProjectsOrderedByDate(int $limit = null)
     {
-        return $this->projectRepository->findBy(['status' => 'active'], []);
+        return $this->projectRepository->findBy(['status' => 'active'], ['createdAt' => 'desc'], $limit);
     }
 
     public function approve(Project $project): void

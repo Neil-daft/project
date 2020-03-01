@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Project;
 use App\Repository\ShortListRepository;
 use App\Service\ProjectService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -51,10 +52,23 @@ class ProfileController extends AbstractController
             ]);
         } else {
             $shortLists = $user->getShortLists();
-
+            $projects = $this->projectService->getActiveProjectsOrderedByDate();
+            $listed = [];
+            foreach ($projects as $project) {
+                /** @var Project $project */
+                if (!empty($project->getShortLists())) {
+                    foreach ($project->getShortLists() as $shortList) {
+                        if ($this->getUser() == $shortList->getUser()) {
+                            $listed[$project->getId()] = true;
+                        }
+                    }
+                }
+            }
             return $this->render('profile/index.html.twig', [
                 'controller_name' => 'ProfileController',
-                'shortlists' => $shortLists
+                'shortlists' => $shortLists,
+                'projects' => $projects,
+                'listed' => $listed
             ]);
         }
     }

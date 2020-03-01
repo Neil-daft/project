@@ -11,6 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 // Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
 // const $ = require('jquery');
 require('../images/header.jpg');
+require('../images/card-header.jpg');
 require('bootstrap');
 const $ = require('jquery');
 
