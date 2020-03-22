@@ -9,13 +9,15 @@
                         <h5 class="mb-1">{{ project.title }}</h5>
                         <p class="mb-1">{{ project.description }}</p>
                         <small class="mt-1">Value : {{ project.value }}</small>
+                        <small>Job posted on {{ project.createdAt|date("F jS \\a\\t g:ia") }}</small>
                         <small>Status : <mark>{{ project.status }}</mark></small>
                         {% if project.shortLists is defined %}
                             <small>Interested gardeners:
                             {% for shortList in project.shortLists %}
-                                <p><mark>{{ shortList.user }}</mark></p>
+                                <p><mark>{{ shortList.user }}</mark><span><a href="">select to quote</a></span></p>
                             {% endfor %}
                             </small>
+
                         {% endif %}
                     </div>
                     <div class="d-flex justify-content-end align-items-center">
