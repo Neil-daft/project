@@ -33,6 +33,11 @@ class ShortList
      */
     private $user;
 
+    /**
+     * @var bool
+     */
+    private $notifiedUser;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -70,6 +75,21 @@ class ShortList
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNotifiedUser(): ?bool
+    {
+        return $this->notifiedUser;
+    }
+
+    public function setNotifiedUser(bool $notifiedUser): self
+    {
+        $this->notifiedUser = $notifiedUser;
 
         return $this;
     }

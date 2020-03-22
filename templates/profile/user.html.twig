@@ -1,5 +1,13 @@
 <div class="container">
     <h1>Hi Normal user</h1>
+    {% for message in app.flashes('notice') %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>{{ message }}</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endfor %}
     <h2 class="h3 text-center">Your Projects:</h2>
     <div>
         <ul class="list-group">
@@ -14,7 +22,18 @@
                         {% if project.shortLists is defined %}
                             <small>Interested gardeners:
                             {% for shortList in project.shortLists %}
-                                <p><mark>{{ shortList.user }}</mark><span><a href="">select to quote</a></span></p>
+                                <p>
+                                    <mark>{{ shortList.user }}</mark>
+                                    <span>
+                                        {% if not shortList.isNotifiedUser %}
+                                        <a href="/notify/{{ shortList.user.getId }}">
+                                            select to quote
+                                        </a>
+                                        {% else %}
+                                            notification sent
+                                        {% endif %}
+                                    </span>
+                                </p>
                             {% endfor %}
                             </small>
 

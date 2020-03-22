@@ -4,8 +4,10 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Project;
+use App\Repository\NotificationRepository;
 use App\Repository\ShortListRepository;
 use App\Service\ProjectService;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -21,10 +23,16 @@ class ProfileController extends AbstractController
      */
     private $projectService;
 
-    public function __construct(ProjectService $projectService, ShortListRepository $shortListRepository)
+    /**
+     * @var \App\Repository\NotificationRepository
+     */
+    private $notificationRepository;
+
+    public function __construct(ProjectService $projectService, ShortListRepository $shortListRepository, NotificationRepository $notificationRepository)
     {
         $this->shortListRepository = $shortListRepository;
         $this->projectService = $projectService;
+        $this->notificationRepository = $notificationRepository;
     }
     /**
      * @Route("/profile", name="profile")
@@ -45,10 +53,14 @@ class ProfileController extends AbstractController
 
         } elseif ($this->isGranted('ROLE_USER')) {
             $projects = $user->getProjects();
+            $notifications = $this->notificationRepository->findBy(['sender' => $user->getUsername()]);
+            if (!empty($notifications)) {
+                $this->resolveNotifications($projects, $notifications);
+            }
 
             return $this->render('profile/index.html.twig', [
                 'controller_name' => 'ProfileController',
-                'projects' => $projects
+                'projects' => $projects,
             ]);
         } else {
             $shortLists = $user->getShortLists();
@@ -70,6 +82,20 @@ class ProfileController extends AbstractController
                 'projects' => $projects,
                 'listed' => $listed
             ]);
+        }
+    }
+
+    private function resolveNotifications(?Collection $projects, array $notifications): void
+    {
+        foreach ($projects as $project) {
+            /** @var Project $project */
+            foreach ($project->getShortLists() as $shortList) {
+                foreach ($notifications as $notification) {
+                    if ($shortList->getUser()->getId() === $notification->getUser()->getId()) {
+                        $shortList->setNotifiedUser(true);
+                    }
+                }
+            }
         }
     }
 }
