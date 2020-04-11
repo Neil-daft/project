@@ -54,9 +54,15 @@ class Project
      */
     private $shortLists;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Notification", mappedBy="project")
+     */
+    private $notifications;
+
     public function __construct()
     {
         $this->shortLists = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -161,6 +167,37 @@ class Project
             // set the owning side to null (unless already changed)
             if ($shortList->getProject() === $this) {
                 $shortList->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Notification[]
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): self
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications[] = $notification;
+            $notification->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): self
+    {
+        if ($this->notifications->contains($notification)) {
+            $this->notifications->removeElement($notification);
+            // set the owning side to null (unless already changed)
+            if ($notification->getProject() === $this) {
+                $notification->setProject(null);
             }
         }
 

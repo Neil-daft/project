@@ -40,6 +40,7 @@
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <div class="d-flex flex-column align-content-center">
                                     <h5 class="mb-1">{{ project.title }}</h5>
+                                    <small class="mb-3">Posted on : <mark>{{ project.createdAt | date('d-m-Y') }}</mark></small>
                                     <p class="mb-1">{{ project.description }}</p>
                                     <small class="mt-1">Value : {{ project.value }}</small>
                                     <small>Status : <mark>{{ project.status }}</mark></small>

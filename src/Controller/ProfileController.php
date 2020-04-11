@@ -42,60 +42,82 @@ class ProfileController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
-        if ($this->isGranted('ROLE_ADMIN')) {
-            $projects = $this->projectService->getProjectsOrderedByDate();
-            $shortlists = $this->shortListRepository->findAll();
+        switch ($this) {
+            case $this->isGranted('ROLE_ADMIN'):
+                $projects = $this->projectService->getProjectsOrderedByDate();
+                $shortlists = $this->shortListRepository->findAll();
 
-            return $this->render('profile/index.html.twig', [
-                'projects' => $projects,
-                'shortlists' => $shortlists
-            ]);
+                return $this->render('profile/index.html.twig', [
+                    'projects' => $projects,
+                    'shortlists' => $shortlists
+                ]);
+                break;
+            case $this->isGranted('ROLE_USER'):
+                $projects = $user->getProjects();
+                $notifications = $this->notificationRepository->findBy(['sender' => $user->getUsername()]);
+                if (!empty($notifications)) {
+                    $this->resolveNotifications($projects, $notifications);
+                }
 
-        } elseif ($this->isGranted('ROLE_USER')) {
-            $projects = $user->getProjects();
-            $notifications = $this->notificationRepository->findBy(['sender' => $user->getUsername()]);
-            if (!empty($notifications)) {
-                $this->resolveNotifications($projects, $notifications);
-            }
-
-            return $this->render('profile/index.html.twig', [
-                'controller_name' => 'ProfileController',
-                'projects' => $projects,
-            ]);
-        } else {
-            $shortLists = $user->getShortLists();
-            $projects = $this->projectService->getActiveProjectsOrderedByDate();
-            $listed = [];
-            foreach ($projects as $project) {
-                /** @var Project $project */
-                if (!empty($project->getShortLists())) {
-                    foreach ($project->getShortLists() as $shortList) {
-                        if ($this->getUser() == $shortList->getUser()) {
-                            $listed[$project->getId()] = true;
+                return $this->render('profile/index.html.twig', [
+                    'controller_name' => 'ProfileController',
+                    'projects' => $projects
+                ]);
+                break;
+            default:
+                $shortLists = $user->getShortLists();
+                $projects = $this->projectService->getActiveProjectsOrderedByDate();
+                $notifications = $this->notificationRepository->findBy(['user' => $this->getUser()]);
+                foreach ($projects as $project) {
+                    foreach ($notifications as $notification) {
+                        if ($notification->getProject()->getId() == $project->getId()) {
+                            $project->addNotification($notification);
                         }
                     }
                 }
-            }
-            return $this->render('profile/index.html.twig', [
-                'controller_name' => 'ProfileController',
-                'shortlists' => $shortLists,
-                'projects' => $projects,
-                'listed' => $listed
-            ]);
+
+                $listed = $this->resolveTradeUserShortLists($projects);
+
+                return $this->render('profile/index.html.twig', [
+                    'shortlists' => $shortLists,
+                    'projects' => $projects,
+                    'listed' => $listed,
+                    'notifications' => $notifications,
+
+                ]);
         }
     }
 
     private function resolveNotifications(?Collection $projects, array $notifications): void
     {
         foreach ($projects as $project) {
-            /** @var Project $project */
             foreach ($project->getShortLists() as $shortList) {
                 foreach ($notifications as $notification) {
-                    if ($shortList->getUser()->getId() === $notification->getUser()->getId()) {
-                        $shortList->setNotifiedUser(true);
+                    if ($notification->getProject()->getId() == $project->getId()) {
+                        if ($notification->getUser() == $shortList->getUser()) {
+                            /** @var \App\Entity\ShortList $shortList */
+                            $shortList->setNotifiedUser(true);
+                        }
                     }
                 }
             }
         }
+    }
+
+    private function resolveTradeUserShortLists(array $projects): array
+    {
+        $listed = [];
+        foreach ($projects as $project) {
+            /** @var Project $project */
+            if (!empty($project->getShortLists())) {
+                foreach ($project->getShortLists() as $shortList) {
+                    if ($this->getUser() == $shortList->getUser()) {
+                        $listed[$project->getId()] = true;
+                    }
+                }
+            }
+        }
+
+        return $listed;
     }
 }

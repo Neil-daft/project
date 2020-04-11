@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Notification;
+use App\Entity\Project;
 use App\Entity\User;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,14 +22,18 @@ class NotificationController extends AbstractController
         $this->urlGenerator = $urlGenerator;
     }
     /**
-     * @Route("/notify/{id}", name="new_notification")
+     * @Route("/notify/{userId}/{projectId}", name="new_notification")
+     * @ParamConverter("user", options={"id" = "userId"})
+     * @ParamConverter("project", options={"id" = "projectId"})
+     *
      */
-    public function new(User $user)
+    public function new(User $user, Project $project)
     {
         $notification = new Notification();
         $notification->setUser($user);
         $notification->setSender($this->getUser()->getUserName());
         $notification->setCreatedAt(new \DateTime('now'));
+        $notification->setProject($project);
 
         $entityManager = $this->getDoctrine()->getManager();
 

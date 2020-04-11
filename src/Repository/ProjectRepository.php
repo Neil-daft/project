@@ -47,4 +47,13 @@ class ProjectRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function findProjectsWithNotifications(\App\Entity\User $user)
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.user = :user')
+            ->leftjoin('p.notifications', 'pnot')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->execute();
+    }
 }

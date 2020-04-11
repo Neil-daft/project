@@ -19,18 +19,20 @@
                         <small class="mt-1">Value : {{ project.value }}</small>
                         <small>Job posted on {{ project.createdAt|date("F jS \\a\\t g:ia") }}</small>
                         <small>Status : <mark>{{ project.status }}</mark></small>
+
                         {% if project.shortLists is defined %}
                             <small>Interested gardeners:
                             {% for shortList in project.shortLists %}
                                 <p>
+
                                     <mark>{{ shortList.user }}</mark>
                                     <span>
-                                        {% if not shortList.isNotifiedUser %}
-                                        <a href="/notify/{{ shortList.user.getId }}">
+                                        {% if shortList.isNotifiedUser %}
+                                            notification sent
+                                        {% else %}
+                                            <a href="/notify/{{ shortList.user.getId }}/{{ project.getId }}">
                                             select to quote
                                         </a>
-                                        {% else %}
-                                            notification sent
                                         {% endif %}
                                     </span>
                                 </p>

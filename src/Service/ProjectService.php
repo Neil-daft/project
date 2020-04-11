@@ -5,6 +5,7 @@ namespace App\Service;
 
 use App\Domain\Status;
 use App\Entity\Project;
+use App\Entity\User;
 use App\Repository\ProjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -36,6 +37,11 @@ class ProjectService
     public function getActiveProjectsOrderedByDate(int $limit = null)
     {
         return $this->projectRepository->findBy(['status' => 'active'], ['createdAt' => 'desc'], $limit);
+    }
+
+    public function getProjectsWithNotifiedUsers(User $user)
+    {
+        return $this->projectRepository->findProjectsWithNotifications($user);
     }
 
     public function approve(Project $project): void
