@@ -1,3 +1,5 @@
+{% set activePage = 'profile' %}
+
 <div class="container">
     <h1>Hi Trade user</h1>
     <div>
@@ -7,11 +9,6 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="shortlist-tab" data-toggle="tab" href="#shortlists" role="tab" aria-controls="shortlist" aria-selected="true">Shortlists</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="notification-tab" data-toggle="tab" href="#notifications" role="tab" aria-controls="shortlist" aria-selected="true">
-                    Notifications <span class="badge badge-success">{{ notifications | length }} new</span>
-                </a>
             </li>
         </ul>
         <div class="tab-content" id="myTabContent">
@@ -25,10 +22,14 @@
                                         <h5 class="mb-1">{{ shortlist.project.title }}</h5>
                                         <p class="mb-1">{{ shortlist.project.description }}</p>
                                         <small class="mt-1">Value : {{ shortlist.project.value }}</small>
-                                        <small>Status : <mark>{{ shortlist.project.status }}</mark></small>
-                                    </div>
-                                    <div class="d-flex justify-content-end align-items-center">
-                                        <span class="badge badge-success">You have registered interest for this project</span>
+                                        <small>Status : <mark>{{ shortlist.status }}</mark></small>
+                                        {% if shortlist.status == constant('App\\Domain\\Status::STATUS_ACCEPTED') %}
+                                            <p class="mb-1">Congrats!</p>
+                                            <p>{{ shortlist.project.getUser }} has selected you to quote for their project.</p>
+                                        {% endif %}
+                                        {% if shortlist.project.status == constant('App\\Domain\\Status::STATUS_CLOSED') %}
+                                            <p>This project is now closed</p>
+                                        {% endif %}
                                     </div>
                                 </li>
                             {% endfor %}
@@ -48,83 +49,15 @@
                                     <small>Status : <mark>{{ project.status }}</mark></small>
                                 </div>
                                     <div class="d-flex flex-column justify-content-end align-items-center">
-                                    {% if project.getNotifications is defined %}
-                                    {% for notification in project.getNotifications %}
-                                        <h5 class="mb-1">Congratulations!</h5>
-                                        <p class="mb-1">You have been invited to quote for this job.</p>
-                                        <a class="btn btn-primary" data-toggle="collapse" href="#collapse{{ notification.id }}" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                            Show Contact Details
-                                        </a>
-                                        <div class="collapse" id="collapse{{ notification.id }}">
-                                            <div class="card card-body">
-                                                {{ notification.sender }}
-                                            </div>
-                                        </div>
-
-                                    {% endfor %}
                                         {% if listed[project.getId] is defined %}
                                             <p>already registered</p>
                                         {% else %}
-                                            <a href="{{ path('shortlist_create', {'id': project.id}) }}" type="button" class="m-3 btn btn-outline-secondary btn-sm">
+                                            <a href="{{ path('shortlist_create', {'projectId': project.id}) }}" type="button" class="m-3 btn btn-outline-secondary btn-sm">
                                                 Register Interest
                                             </a>
                                         {% endif %}
-                                        {% endif %}
                                 </div>
                             </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-            <div class="tab-pane fade" id="notifications" role="tabpanel" aria-labelledby="notification-tab">
-                <div class="mt-5">
-                    <ul class="list-group">
-                        {% for notification in notifications %}
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <div class="d-flex flex-column align-content-center">
-                                    <h5 class="mb-1">Congratulations!</h5>
-                                    <p>
-                                    <p class="mb-1">You have been invited to quote for a job.</p>
-                                        <a class="btn btn-primary" data-toggle="collapse" href="#collapse{{ notification.id }}" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                            Show Contact Details
-                                        </a>
-                                    </p>
-                                    <div class="collapse" id="collapse{{ notification.id }}">
-                                        <div class="card card-body">
-                                            {{ notification.sender }}
-                                        </div>
-                                    </div>
-                                    <small class="mb-1">sent on {{ notification.createdAt | date('d-m-Y') }}</small>
-                                    <!-- Button trigger modal -->
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal{{ notification.getProject.getId }}">
-                                        Project details
-                                    </button>
-                                    <h5 class="mb-1"></h5>
-                                    <p class="mb-1"></p>
-                                </div>
-                            </li>
-
-                            <!-- Modal -->
-                            <div class="modal fade" id="modal{{ notification.getProject.getId }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">{{ notification.getProject.title }}</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            {{ notification.getProject.description }}
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            {#                                            <button type="button" class="btn btn-primary">Save changes</button>#}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
                         {% endfor %}
                     </ul>
                 </div>

@@ -1,3 +1,6 @@
+{% set loggedInNavItems = [['profile', 'Profile'], ['app_logout', 'Logout']] %}
+
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <a class="navbar-brand" href="#">Website name</a>
@@ -6,21 +9,15 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
             <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="{{ path('home_page') }}">Home</a>
                 </li>
-                {% if is_granted('ROLE_TRADE') %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('project_index') }}">Projects</a>
-                    </li>
-                {% endif %}
                 {% if is_granted("IS_AUTHENTICATED_FULLY") %}
+                    {% for item in loggedInNavItems %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('profile') }}" tabindex="-1" aria-disabled="true">Profile</a>
+                        <a class="nav-link" href="{{ path(item[0]) }}" tabindex="-1" aria-disabled="true">{{ item[1] }}</a>
                     </li>
-                    <li>
-                        <a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
-                    </li>
+                    {% endfor %}
                 {% else %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('app_login') }}">Login</a>

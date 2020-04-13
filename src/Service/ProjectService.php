@@ -5,7 +5,6 @@ namespace App\Service;
 
 use App\Domain\Status;
 use App\Entity\Project;
-use App\Entity\User;
 use App\Repository\ProjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -39,11 +38,6 @@ class ProjectService
         return $this->projectRepository->findBy(['status' => 'active'], ['createdAt' => 'desc'], $limit);
     }
 
-    public function getProjectsWithNotifiedUsers(User $user)
-    {
-        return $this->projectRepository->findProjectsWithNotifications($user);
-    }
-
     public function approve(Project $project): void
     {
         $project->setStatus(Status::STATUS_ACTIVE);
@@ -60,6 +54,12 @@ class ProjectService
     {
         $this->entityManager->remove($project);
         $this->update();
+    }
+
+    public function closeProject(Project $project): void
+    {
+        $project->setStatus(Status::STATUS_CLOSED);
+        $this->update();;
     }
 
     public function update(): void

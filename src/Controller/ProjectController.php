@@ -3,11 +3,14 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Domain\Events\ProjectCreatedEvent;
 use App\Domain\Status;
 use App\Entity\Project;
 use App\Form\Project1Type;
 use App\Service\ProjectService;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -78,6 +81,10 @@ class ProjectController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $dispatcher = new EventDispatcher();
+            $event = new ProjectCreatedEvent($project);
+            $dispatcher->dispatch($event, ProjectCreatedEvent::NAME);
+
             $this->projectService->save($project);
 
             return $this->redirectToRoute('profile');
@@ -153,6 +160,17 @@ class ProjectController extends AbstractController
     public function approveProject(Project $project): Response
     {
         $this->projectService->approve($project);
+
+        return $this->redirectToRoute('profile');
+    }
+
+    /**
+     * @Route("/close/{id}", name="project_close")
+     * @ParamConverter("project", options={"id"="id"})
+     */
+    public function closeProject(Project $project)
+    {
+        $this->projectService->closeProject($project);
 
         return $this->redirectToRoute('profile');
     }

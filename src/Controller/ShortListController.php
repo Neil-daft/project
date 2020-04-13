@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Project;
 use App\Entity\ShortList;
-use App\Repository\ProjectRepository;
+use App\Service\ShortListService;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,16 +17,16 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class ShortListController extends AbstractController
 {
-    /** @var \App\Repository\ProjectRepository */
-    private $projectRepository;
-
     /** @var \Symfony\Component\Routing\Generator\UrlGeneratorInterface */
     private $urlGenerator;
 
-    public function __construct(ProjectRepository $projectRepository, UrlGeneratorInterface $urlGenerator)
+    /** @var \App\Service\ShortListService */
+    private $shortListService;
+
+    public function __construct(UrlGeneratorInterface $urlGenerator, ShortListService $shortListService)
     {
-        $this->projectRepository = $projectRepository;
         $this->urlGenerator = $urlGenerator;
+        $this->shortListService = $shortListService;
     }
 
     /**
@@ -38,22 +40,34 @@ class ShortListController extends AbstractController
     }
 
     /**
-     * @Route("/new/{id}", name="shortlist_create")
+     * @Route("/new/{projectId}", name="shortlist_create")
+     * @ParamConverter("project", options={"id"="projectId"})
      */
-    public function create(int $id)
+    public function create(Project $project): RedirectResponse
     {
-        $project = $this->projectRepository->find($id);
-        $shortList = new ShortList();
-        $shortList->setUser($this->getUser());
-        $shortList->setCreatedAt(new \DateTime('now'));
-        $shortList->setProject($project);
+        $this->shortListService->createNewShortList($project, $this->getUser());
 
-        $entityManager = $this->getDoctrine()->getManager();
-
-        $entityManager->persist($shortList);
-        $entityManager->flush();
-
-        return new RedirectResponse($this->urlGenerator->generate('profile'));
+        return $this->redirectToProfile();
     }
 
+    /**
+     * @Route("/update/{id}", name="shortlist_update")
+     * @ParamConverter("shortlist", options={"id"="id"})
+     */
+    public function updateStatus(ShortList $shortList)
+    {
+        $this->shortListService->updateShortListStatus($shortList);
+
+        $this->addFlash(
+            'notice',
+            'Notified the user'
+        );
+
+        return $this->redirectToProfile();
+    }
+
+    private function redirectToProfile(): RedirectResponse
+    {
+        return new RedirectResponse($this->urlGenerator->generate('profile'));
+    }
 }
