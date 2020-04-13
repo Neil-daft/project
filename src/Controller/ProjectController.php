@@ -4,29 +4,39 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Domain\Events\ProjectCreatedEvent;
+use App\Domain\EventSubscribers\ProjectSubscriber;
 use App\Domain\Status;
 use App\Entity\Project;
 use App\Form\Project1Type;
 use App\Service\ProjectService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+
 
 /**
  * @Route("/project")
  */
 class ProjectController extends AbstractController
 {
-    /** @var \App\Service\ProjectService */
+    /** @var ProjectService */
     private $projectService;
 
-    public function __construct(ProjectService $projectService)
+    /** @var EventDispatcherInterface */
+    private $eventDispatcher;
+
+    /**  @var \App\Domain\EventSubscribers\ProjectSubscriber */
+    private $projectSubscriber;
+
+    public function __construct(ProjectService $projectService, EventDispatcherInterface $eventDispatcher, ProjectSubscriber $projectSubscriber)
     {
         $this->projectService = $projectService;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->projectSubscriber = $projectSubscriber;
     }
 
     /**
@@ -81,9 +91,10 @@ class ProjectController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $dispatcher = new EventDispatcher();
+
+            $this->eventDispatcher->addSubscriber($this->projectSubscriber);
             $event = new ProjectCreatedEvent($project);
-            $dispatcher->dispatch($event, ProjectCreatedEvent::NAME);
+            $this->eventDispatcher->dispatch($event, ProjectCreatedEvent::NAME);
 
             $this->projectService->save($project);
 

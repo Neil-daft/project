@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Domain\Events\ShortListEvent;
+use App\Domain\EventSubscribers\ShortListEventSubscriber;
 use App\Entity\Project;
 use App\Entity\ShortList;
 use App\Service\ShortListService;
@@ -11,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @Route("/shortlist")
@@ -23,10 +26,22 @@ class ShortListController extends AbstractController
     /** @var \App\Service\ShortListService */
     private $shortListService;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, ShortListService $shortListService)
-    {
+    /** @var EventDispatcherInterface */
+    private $eventDispatcher;
+
+    /**  @var ShortListEventSubscriber */
+    private $shortListEventSubscriber;
+
+    public function __construct(
+        UrlGeneratorInterface $urlGenerator,
+        ShortListService $shortListService,
+        EventDispatcherInterface $eventDispatcher,
+        ShortListEventSubscriber $shortListEventSubscriber
+    ) {
         $this->urlGenerator = $urlGenerator;
         $this->shortListService = $shortListService;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->shortListEventSubscriber = $shortListEventSubscriber;
     }
 
     /**
@@ -56,7 +71,10 @@ class ShortListController extends AbstractController
      */
     public function updateStatus(ShortList $shortList)
     {
-        $this->shortListService->updateShortListStatus($shortList);
+        $shortList = $this->shortListService->acceptShortList($shortList);
+        $this->eventDispatcher->addSubscriber($this->shortListEventSubscriber);
+        $event = new ShortListEvent($shortList);
+        $this->eventDispatcher->dispatch($event, ShortListEvent::NAME);
 
         $this->addFlash(
             'notice',

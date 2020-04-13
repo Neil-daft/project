@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Project;
 use App\Entity\User;
+use App\Repository\ChargeRepository;
 use App\Repository\ShortListRepository;
 use App\Service\ProjectService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,10 +19,14 @@ class ProfileController extends AbstractController
     /** @var ProjectService */
     private $projectService;
 
-    public function __construct(ProjectService $projectService, ShortListRepository $shortListRepository)
+    /** @var \App\Repository\ChargeRepository  */
+    private $chargesRepository;
+
+    public function __construct(ProjectService $projectService, ShortListRepository $shortListRepository, ChargeRepository $chargesRepository)
     {
         $this->shortListRepository = $shortListRepository;
         $this->projectService = $projectService;
+        $this->chargesRepository = $chargesRepository;
     }
 
     /**
@@ -36,10 +41,12 @@ class ProfileController extends AbstractController
             case $this->isGranted('ROLE_ADMIN'):
                 $projects = $this->projectService->getProjectsOrderedByDate();
                 $shortlists = $this->shortListRepository->findAll();
+                $charges = $this->chargesRepository->findAll();
 
                 return $this->render('profile/index.html.twig', [
                     'projects' => $projects,
-                    'shortlists' => $shortlists
+                    'shortlists' => $shortlists,
+                    'charges' => $charges
                 ]);
                 break;
             case $this->isGranted('ROLE_USER'):

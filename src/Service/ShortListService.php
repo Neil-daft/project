@@ -36,11 +36,13 @@ class ShortListService
         $this->save();
     }
 
-    public function updateShortListStatus(ShortList $shortList)
+    public function acceptShortList(ShortList $shortList): ShortList
     {
         $shortList->setStatus(Status::STATUS_ACCEPTED);
 
         $this->save();
+
+        return $shortList;
     }
 
     private function save(): void
