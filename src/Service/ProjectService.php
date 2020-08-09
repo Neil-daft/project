@@ -25,7 +25,7 @@ class ProjectService
     /**
      * @return Project[]
      */
-    public function getProjectsOrderedByDate()
+    public function getProjectsOrderedByDate(): array
     {
         return $this->projectRepository->findBy([], ['createdAt' => 'desc']);
     }
@@ -33,7 +33,7 @@ class ProjectService
     /**
      * @return Project[]
      */
-    public function getActiveProjectsOrderedByDate(int $limit = null)
+    public function getActiveProjectsOrderedByDate(int $limit = null): array
     {
         return $this->projectRepository->findBy(['status' => 'active'], ['createdAt' => 'desc'], $limit);
     }
@@ -59,7 +59,7 @@ class ProjectService
     public function closeProject(Project $project): void
     {
         $project->setStatus(Status::STATUS_CLOSED);
-        $this->update();;
+        $this->update();
     }
 
     public function update(): void

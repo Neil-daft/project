@@ -27,7 +27,7 @@ class ProjectSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onProjectCreated(ProjectCreatedEvent $event)
+    public function onProjectCreated(ProjectCreatedEvent $event): void
     {
         $project = $event->getProject();
         $this->logger->log('INFO', 'New Project created', ['date' => $project->getCreatedAt()]);

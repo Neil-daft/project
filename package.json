@@ -1,9 +1,14 @@
 {
     "devDependencies": {
+        "@babel/preset-react": "^7.0.0",
         "@symfony/webpack-encore": "^0.27.0",
         "core-js": "^3.0.0",
+        "eslint": "^7.5.0",
+        "eslint-plugin-react": "^7.20.5",
         "jquery": "^3.4.1",
         "popper.js": "^1.15.0",
+        "react": "^16.13.1",
+        "react-dom": "^16.13.1",
         "webpack-notifier": "^1.6.0"
     },
     "license": "UNLICENSED",

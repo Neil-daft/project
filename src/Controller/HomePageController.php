@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class  HomePageController extends AbstractController
 {
     /**
-     * @var \App\Service\ProjectService
+     * @var ProjectService
      */
     private $projectService;
 

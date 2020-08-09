@@ -11,8 +11,9 @@
     <div class="container mt-5">
         <h1 class="text-uppercase">Latest Projects</h1>
         <div class="row">
-
-
+            <div id=" "></div>
+        </div>
+    <div class="row">
             {% for project in activeProjects %}
                 <div class="col-sm">
                     <div class="card" style="width: 18rem;">
@@ -20,7 +21,7 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ project.title }}</h5>
                             <p class="card-text">{{ project.description }}</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                            <a href="#" class="btn btn-primary">Go somewhere Else</a>
                         </div>
                     </div>
                 </div>
@@ -69,4 +70,9 @@
         </div>
     </footer>
 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('search') }}
 {% endblock %}

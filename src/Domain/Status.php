@@ -4,9 +4,9 @@ namespace App\Domain;
 
 class Status
 {
-    const STATUS_PENDING = 'pending';
-    const STATUS_ACTIVE = 'active';
-    const STATUS_CLOSED = 'closed';
-    const STATUS_SUBMITTED = 'submitted';
-    const STATUS_ACCEPTED = 'accepted';
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_ACTIVE = 'active';
+    public const STATUS_CLOSED = 'closed';
+    public const STATUS_SUBMITTED = 'submitted';
+    public const STATUS_ACCEPTED = 'accepted';
 }

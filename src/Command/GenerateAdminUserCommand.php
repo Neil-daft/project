@@ -27,7 +27,7 @@ class GenerateAdminUserCommand extends Command
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Creates a new admin user');
         $this->setHelp('This command creates a new admin user with the provided credentials');
@@ -41,7 +41,7 @@ class GenerateAdminUserCommand extends Command
             'The admins password');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
         $email = $input->getArgument(CommandArgument::EMAIL_ADDRESS);
         $password = $input->getArgument('password');

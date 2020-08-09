@@ -9,6 +9,7 @@ use App\Repository\ChargeRepository;
 use App\Repository\ShortListRepository;
 use App\Service\ProjectService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ProfileController extends AbstractController
@@ -19,7 +20,7 @@ class ProfileController extends AbstractController
     /** @var ProjectService */
     private $projectService;
 
-    /** @var \App\Repository\ChargeRepository  */
+    /** @var ChargeRepository */
     private $chargesRepository;
 
     public function __construct(ProjectService $projectService, ShortListRepository $shortListRepository, ChargeRepository $chargesRepository)
@@ -32,7 +33,7 @@ class ProfileController extends AbstractController
     /**
      * @Route("/profile", name="profile")
      */
-    public function index()
+    public function index(): ?Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         /** @var User $user */
@@ -48,7 +49,6 @@ class ProfileController extends AbstractController
                     'shortlists' => $shortlists,
                     'charges' => $charges
                 ]);
-                break;
             case $this->isGranted('ROLE_USER'):
                 $projects = $user->getProjects();
 
@@ -56,7 +56,6 @@ class ProfileController extends AbstractController
                     'controller_name' => 'ProfileController',
                     'projects' => $projects
                 ]);
-                break;
             default:
                 $shortLists = $user->getShortLists();
                 $projects = $this->projectService->getActiveProjectsOrderedByDate();

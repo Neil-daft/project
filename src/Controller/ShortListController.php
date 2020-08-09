@@ -69,7 +69,7 @@ class ShortListController extends AbstractController
      * @Route("/update/{id}", name="shortlist_update")
      * @ParamConverter("shortlist", options={"id"="id"})
      */
-    public function updateStatus(ShortList $shortList)
+    public function updateStatus(ShortList $shortList): RedirectResponse
     {
         $shortList = $this->shortListService->acceptShortList($shortList);
         $this->eventDispatcher->addSubscriber($this->shortListEventSubscriber);

@@ -11,6 +11,7 @@ use App\Form\Project1Type;
 use App\Service\ProjectService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -179,7 +180,7 @@ class ProjectController extends AbstractController
      * @Route("/close/{id}", name="project_close")
      * @ParamConverter("project", options={"id"="id"})
      */
-    public function closeProject(Project $project)
+    public function closeProject(Project $project): RedirectResponse
     {
         $this->projectService->closeProject($project);
 
